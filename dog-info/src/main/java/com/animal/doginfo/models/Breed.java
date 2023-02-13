@@ -1,16 +1,17 @@
 package com.animal.doginfo.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import javax.persistence.*;
+import java.util.Objects;
 
 @Entity(name = "breed_info")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Breed {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long breed_id;
+    @Column(name = "breed_id")
+    private Long id;
     private String breed_name;
     private Integer height_low_inches;
     private Integer height_high_inches;
@@ -26,11 +27,11 @@ public class Breed {
     }
 
     public Long getBreed_id() {
-        return breed_id;
+        return id;
     }
 
-    public void setBreed_id(Long breed_id) {
-        this.breed_id = breed_id;
+    public void setBreed_id(Long id) {
+        this.id = id;
     }
 
     public String getBreed_name() {
@@ -103,5 +104,18 @@ public class Breed {
 
     public void setReps_upper(Integer reps_upper) {
         this.reps_upper = reps_upper;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Breed breed = (Breed) o;
+        return id.equals(breed.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

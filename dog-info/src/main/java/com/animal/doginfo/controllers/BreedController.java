@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/breeds")
+@RequestMapping("/api/breeds")
 public class BreedController {
     @Autowired
     private BreedRepository breedRepository;
@@ -18,6 +18,7 @@ public class BreedController {
     public List<Breed> list(){
         return breedRepository.findAll();
     }
+
     @GetMapping
     @RequestMapping("{id}")
     public Breed get(@PathVariable Long id){
