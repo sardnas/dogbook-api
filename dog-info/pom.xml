@@ -8,8 +8,8 @@
 		<version>2.7.8</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.pluralsight</groupId>
-	<artifactId>conference-demo</artifactId>
+	<groupId>com.animal</groupId>
+	<artifactId>dog-info</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>conference-demo</name>
 	<description>Demo project for Spring Boot</description>
