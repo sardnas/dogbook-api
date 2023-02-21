@@ -2,7 +2,7 @@
   "name": "heroku-springboot-dog-app",
   "buildpacks": [
     {
-      "url": "heroku/gradle"
+      "url": "heroku/java"
     }
   ]
 }
