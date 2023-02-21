@@ -1,8 +1,0 @@
-{
-  "name": "heroku-springboot-dog-app",
-  "buildpacks": [
-    {
-      "url": "heroku/java"
-    }
-  ]
-}
