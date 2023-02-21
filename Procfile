@@ -1,1 +1,1 @@
-web: java -jar target/springboot-dog-app-1.0-SNAPSHOT.jar
+web:
