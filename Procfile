@@ -1,1 +1,1 @@
-web:
+web: java -jar target/dog-info-1.0-SNAPSHOT.jar
