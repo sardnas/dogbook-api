@@ -1,0 +1,20 @@
+CREATE TABLE breed_info
+(
+    breed_id  SERIAL PRIMARY KEY,
+    breed_name varchar(50) NOT NULL,
+    height_low_inches integer NOT NULL,
+    height_high_inches integer NOT NULL,
+    weight_low_lbs integer NOT NULL,
+    weight_high_lbs integer NOT NULL,
+    breed_classification varchar(150) NOT NULL,
+    breed_obey varchar(10) NOT NULL,
+    reps_lower integer NOT NULL,
+    reps_upper integer NOT NULL
+);
+breed_name	height_low_inches	height_high_inches	weight_low_lbs	weight_high_lbs	breed_classification	breed_obey	reps_lower	reps_upper
+
+
+COPY breed_info(breed_name, height_low_inches, height_high_inches, weight_low_lbs, weight_high_lbs, breed_classification, breed_obey, reps_lower, reps_upper)
+FROM 'C:\data\breed_info.csv'
+DELIMITER ','
+CSV HEADER;
