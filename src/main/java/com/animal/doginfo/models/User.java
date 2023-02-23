@@ -38,6 +38,12 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(	name = "user_breed",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "breed_id"))
+    private Set<Role> breeds = new HashSet<>();
+
     public User() {
     }
 
@@ -85,5 +91,13 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public Set<Role> getBreeds() {
+        return breeds;
+    }
+
+    public void setBreeds(Set<Role> breeds) {
+        this.breeds = breeds;
     }
 }
