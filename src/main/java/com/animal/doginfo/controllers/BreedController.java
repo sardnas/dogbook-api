@@ -77,7 +77,7 @@ public class BreedController {
 
     @GetMapping()
     @RequestMapping("favorites")
-    public List<Breed> getFavorites(){
+    public Set<Breed> getFavorites(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
         String username = userDetails.getUsername();
@@ -85,9 +85,7 @@ public class BreedController {
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found."));
 
         Set<Breed> breeds = user.getBreeds();
-        List<Breed> listBreeds = new ArrayList<>(breeds);
-        for (Breed i : breeds)
-            listBreeds.add(i);
-        return listBreeds;
+
+        return breeds;
     }
 }
