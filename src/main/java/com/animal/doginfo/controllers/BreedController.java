@@ -60,7 +60,7 @@ public class BreedController {
         return breedRepository.saveAndFlush(existingSession);
     }
 
-    @RequestMapping(value = "{favorite}", method = RequestMethod.PUT)
+    @PostMapping(value = "favorites/{id}")
     public ResponseEntity<?> addFavorite(@PathVariable Long id){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
@@ -69,11 +69,24 @@ public class BreedController {
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found."));
 
         Breed breed = breedRepository.getOne(id); // add error handling here
-        Set<Breed> breeds = new HashSet<>();
+        Set<Breed> breeds = user.getBreeds();
         breeds.add(breed);
         user.setBreeds(breeds);
 
         userRepository.save(user);
-        return ResponseEntity.ok(new MessageResponse("Breed added to favorites for user: " + username));
+        return ResponseEntity.ok(new MessageResponse(breed.getBreed_name() + " added to favorites for user " + username));
+    }
+
+    @GetMapping()
+    @RequestMapping("favorites")
+    public Set<Breed> getFavorites(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
+        String username = userDetails.getUsername();
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found."));
+
+        Set<Breed> breeds = user.getBreeds();
+        return breeds;
     }
 }
