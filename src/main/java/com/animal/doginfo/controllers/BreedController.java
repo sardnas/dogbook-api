@@ -15,10 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -70,16 +67,17 @@ public class BreedController {
 
         Breed breed = breedRepository.getOne(id); // add error handling here
         Set<Breed> breeds = user.getBreeds();
-        breeds.add(breed);
+        if(!breeds.contains(breed)){
+            breeds.add(breed);
+        }
         user.setBreeds(breeds);
-
         userRepository.save(user);
         return ResponseEntity.ok(new MessageResponse(breed.getBreed_name() + " added to favorites for user " + username));
     }
 
     @GetMapping()
     @RequestMapping("favorites")
-    public Set<Breed> getFavorites(){
+    public List<Breed> getFavorites(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
         String username = userDetails.getUsername();
@@ -87,6 +85,9 @@ public class BreedController {
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found."));
 
         Set<Breed> breeds = user.getBreeds();
-        return breeds;
+        List<Breed> listBreeds = new ArrayList<>(breeds);
+        for (Breed i : breeds)
+            listBreeds.add(i);
+        return listBreeds;
     }
 }
