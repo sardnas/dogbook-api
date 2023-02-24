@@ -1,12 +1,24 @@
 package com.animal.doginfo.controllers;
 
 import com.animal.doginfo.models.Breed;
+import com.animal.doginfo.models.Role;
+import com.animal.doginfo.models.User;
+import com.animal.doginfo.payload.response.MessageResponse;
 import com.animal.doginfo.repositories.BreedRepository;
+import com.animal.doginfo.repositories.UserRepository;
+import com.animal.doginfo.security.services.UserDetailsImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -15,6 +27,9 @@ import java.util.List;
 public class BreedController {
     @Autowired
     private BreedRepository breedRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     @GetMapping
     public List<Breed> list(){
@@ -43,5 +58,22 @@ public class BreedController {
         Breed existingSession = breedRepository.getOne(id);
         BeanUtils.copyProperties(session, existingSession, "breed_id");
         return breedRepository.saveAndFlush(existingSession);
+    }
+
+    @RequestMapping(value = "{favorite}", method = RequestMethod.PUT)
+    public ResponseEntity<?> addFavorite(@PathVariable Long id){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
+        String username = userDetails.getUsername();
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found."));
+
+        Breed breed = breedRepository.getOne(id); // add error handling here
+        Set<Breed> breeds = new HashSet<>();
+        breeds.add(breed);
+        user.setBreeds(breeds);
+
+        userRepository.save(user);
+        return ResponseEntity.ok(new MessageResponse("Breed added to favorites for user: " + username));
     }
 }

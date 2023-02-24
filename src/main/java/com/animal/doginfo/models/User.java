@@ -42,7 +42,7 @@ public class User {
     @JoinTable(	name = "user_breed",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "breed_id"))
-    private Set<Role> breeds = new HashSet<>();
+    private Set<Breed> breeds = new HashSet<>();
 
     public User() {
     }
@@ -93,11 +93,11 @@ public class User {
         this.roles = roles;
     }
 
-    public Set<Role> getBreeds() {
+    public Set<Breed> getBreeds() {
         return breeds;
     }
 
-    public void setBreeds(Set<Role> breeds) {
+    public void setBreeds(Set<Breed> breeds) {
         this.breeds = breeds;
     }
 }
