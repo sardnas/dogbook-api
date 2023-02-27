@@ -1,7 +1,6 @@
 package com.animal.doginfo.controllers;
 
 import com.animal.doginfo.models.Breed;
-import com.animal.doginfo.models.Role;
 import com.animal.doginfo.models.User;
 import com.animal.doginfo.payload.response.MessageResponse;
 import com.animal.doginfo.repositories.BreedRepository;
@@ -16,6 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import static java.util.stream.Collectors.*;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -104,5 +104,14 @@ public class BreedController {
         user.setBreeds(breeds);
         userRepository.save(user);
         return ResponseEntity.ok(new MessageResponse(breed.getBreed_name() + " removed from favorites for user " + username));
+    }
+
+    @PostMapping(value = "search/{searchValue}")
+    public List<Breed> searchBreed(@PathVariable("searchValue") String searchValue){
+        String searchString = searchValue.toLowerCase();
+        List<Breed> breeds = list();
+        List<Breed> result = breeds.stream()
+                .filter(item -> item.getBreed_name().toLowerCase().startsWith(searchString)).collect(toList());
+        return result;
     }
 }
