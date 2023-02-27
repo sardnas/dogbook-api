@@ -77,7 +77,7 @@ public class BreedController {
 
     @GetMapping()
     @RequestMapping("favorites")
-    public List<Breed> getFavorites(){
+    public Set<Breed> getFavorites(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
         String username = userDetails.getUsername();
@@ -85,9 +85,24 @@ public class BreedController {
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found."));
 
         Set<Breed> breeds = user.getBreeds();
-        List<Breed> listBreeds = new ArrayList<>(breeds);
-        for (Breed i : breeds)
-            listBreeds.add(i);
-        return listBreeds;
+        return breeds;
+    }
+
+    @PostMapping(value = "favorites/delete/{id}")
+    public ResponseEntity<?> deleteFavorite(@PathVariable Long id){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
+        String username = userDetails.getUsername();
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found."));
+
+        Breed breed = breedRepository.getOne(id); // add error handling here
+        Set<Breed> breeds = user.getBreeds();
+        if(breeds.contains(breed)){
+            breeds.remove(breed);
+        }
+        user.setBreeds(breeds);
+        userRepository.save(user);
+        return ResponseEntity.ok(new MessageResponse(breed.getBreed_name() + " removed from favorites for user " + username));
     }
 }
