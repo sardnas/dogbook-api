@@ -3,6 +3,7 @@ package com.animal.doginfo.models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Objects;
 
 @Entity(name = "breed_info")
