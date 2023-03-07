@@ -22,6 +22,8 @@ public class Breed {
     private String breed_obey;
     private Integer reps_lower;
     private Integer reps_upper;
+    private String origin;
+    private String img;
 
     public Breed(){
 
@@ -105,6 +107,22 @@ public class Breed {
 
     public void setReps_upper(Integer reps_upper) {
         this.reps_upper = reps_upper;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(String origin) {
+        this.origin = origin;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
     }
 
     @Override

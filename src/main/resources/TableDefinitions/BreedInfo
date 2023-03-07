@@ -18,3 +18,16 @@ COPY breed_info(breed_name, height_low_inches, height_high_inches, weight_low_lb
 FROM 'C:\data\breed_info.csv'
 DELIMITER ','
 CSV HEADER;
+
+ALTER TABLE breed_info ADD origin VARCHAR(50);
+ALTER TABLE breed_info ADD img VARCHAR(500);
+
+DELETE FROM user_breed;
+
+
+COPY breed_info(breed_name, height_low_inches, height_high_inches, weight_low_lbs, weight_high_lbs, breed_classification, breed_obey, reps_lower, reps_upper, origin, img)
+FROM 'C:\data\breed_info_img.csv'
+DELIMITER ','
+CSV HEADER;
+
+psql -h <host> -U <user> -d <dbname> -d my_db -p <> -c "\copy breed_info FROM 'C:\data\breed_info_img.csv' with (format csv,header true, delimiter ',');"
